@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Launch a floating terminal with the Polarchy logo presentation, then execute the command passed in, and finally end with the polarchy-show-done presentation.
+# Used by actions such as Update System.
+
+cmd="$*"
+exec setsid uwsm-app -- xdg-terminal-exec --app-id=org.polarchy.terminal --title=Polarchy -e bash -c "polarchy-show-logo; $cmd; if [ \$? -ne 130 ]; then polarchy-show-done; fi"

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Launch or focus on a given TUI identified by the passed in as the command.
+# Use by commands like polarchy-launch-wifi to ensure there is only one wifi configuration screen open.
+
+APP_ID="org.polarchy.$(basename "$1")"
+LAUNCH_COMMAND="polarchy-launch-tui $@"
+
+exec polarchy-launch-or-focus "$APP_ID" "$LAUNCH_COMMAND"

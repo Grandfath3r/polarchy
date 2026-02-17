@@ -1,0 +1,3 @@
+#!/bin/bash
+
+polarchy-restart-app swayosd-server

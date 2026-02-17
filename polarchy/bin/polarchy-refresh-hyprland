@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Overwrite all the user configs in ~/.config/hypr with the Polarchy defaults.
+
+polarchy-refresh-config hypr/autostart.conf
+polarchy-refresh-config hypr/bindings.conf
+polarchy-refresh-config hypr/input.conf
+polarchy-refresh-config hypr/looknfeel.conf
+polarchy-refresh-config hypr/hyprland.conf

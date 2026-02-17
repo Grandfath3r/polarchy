@@ -1,0 +1,11 @@
+# Changes require a restart to take effect.
+
+# Ensure Polarchy bins are in the path
+export POLARCHY_PATH=$HOME/.local/share/polarchy
+export PATH=$POLARCHY_PATH/bin:$PATH
+
+# Set default terminal and editor
+source ~/.config/uwsm/default
+
+# Activate mise if present on the system
+polarchy-cmd-present mise && eval "$(mise activate bash)"

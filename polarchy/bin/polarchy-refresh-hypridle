@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Overwrite the user config for hypridle with the Polarchy default and restart the service.
+
+polarchy-refresh-config hypr/hypridle.conf
+polarchy-restart-hypridle

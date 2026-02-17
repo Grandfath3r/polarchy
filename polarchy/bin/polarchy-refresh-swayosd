@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Overwrite the user configs for swayosd (controls on-screen feedback for changing volume/songs etc) with the Polarchy defaults and restart the service.
+
+polarchy-refresh-config swayosd/config.toml
+polarchy-refresh-config swayosd/style.css
+polarchy-restart-swayosd

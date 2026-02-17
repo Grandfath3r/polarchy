@@ -1,0 +1,7 @@
+#!/bin/bash
+
+ASUSCTL_THEME=~/.config/polarchy/current/theme/asusctl.rgb
+
+if polarchy-cmd-present asusctl; then
+  asusctl aura effect static -c $(sed 's/^#//' $ASUSCTL_THEME)
+fi

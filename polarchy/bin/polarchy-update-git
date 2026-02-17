@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+echo -e "\e[32mUpdate Polarchy\e[0m"
+
+git -C $POLARCHY_PATH pull --autostash
+git -C $POLARCHY_PATH --no-pager diff --check || git -C $POLARCHY_PATH reset --merge

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+
+# Ensure screensaver/sleep doesn't set in during updates
+hyprctl dispatch tagwindow +noidle &> /dev/null || true
+
+# Capture update logs
+exec > >(tee "/tmp/polarchy-update.log") 2>&1
+
+# Perform all update steps
+polarchy-update-time
+polarchy-update-keyring
+polarchy-update-available-reset
+polarchy-update-system-pkgs
+polarchy-migrate
+polarchy-update-aur-pkgs
+polarchy-update-orphan-pkgs
+polarchy-hook post-update
+
+polarchy-update-analyze-logs
+
+polarchy-update-restart
+
+# Re-enable screensaver/sleep after updates
+hyprctl dispatch tagwindow -- -noidle &> /dev/null || true

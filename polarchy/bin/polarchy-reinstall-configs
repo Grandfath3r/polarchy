@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+
+# Overwrite all user configs with the Polarchy defaults.
+
+if [ "$EUID" -eq 0 ]; then
+  echo "Error: This script should not be run as root"
+  exit 1
+fi
+
+echo "Resetting all Polarchy configs"
+cp -R ~/.local/share/polarchy/config/* ~/.config/
+cp ~/.local/share/polarchy/default/bashrc ~/.bashrc
+echo '[[ -f ~/.bashrc ]] && . ~/.bashrc' | tee ~/.bash_profile >/dev/null
+
+$(bash $POLARCHY_PATH/install/config/theme.sh)
+
+polarchy-refresh-limine
+polarchy-refresh-plymouth
+polarchy-nvim-setup

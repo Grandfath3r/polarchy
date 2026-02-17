@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+# Reinstall the Polarchy configuration directory from the git source.
+
+git clone "https://github.com/basecamp/polarchy.git" ~/.local/share/polarchy-new >/dev/null
+mv $POLARCHY_PATH ~/.local/share/polarchy-old
+mv ~/.local/share/polarchy-new $POLARCHY_PATH

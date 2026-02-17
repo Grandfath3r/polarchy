@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Overwrite the user configs for the Waybar menu bar with the Polarchy defaults and restart the service.
+
+polarchy-refresh-config waybar/config.jsonc
+polarchy-refresh-config waybar/style.css
+polarchy-restart-waybar

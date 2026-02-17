@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+
+polarchy-launch-floating-terminal-with-presentation "voxtype setup model"
+polarchy-restart-waybar

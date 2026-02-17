@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+echo -e "\e[32mUpdate Firmware\e[0m"
+
+if polarchy-cmd-missing fwupdmgr; then
+  polarchy-pkg-add fwupd
+fi
+
+fwupdmgr refresh --force
+sudo fwupdmgr update
