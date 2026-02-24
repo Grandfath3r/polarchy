@@ -12,15 +12,15 @@ ansi_art='
   ███        ███    ███ ███         ███    ███ ▀███████████ ███    █▄    ███    ███   ███   ███
   ███        ███    ███ ███▌    ▄   ███    ███   ███    ███ ███    ███   ███    ███   ███   ███
  ▄████▀       ▀██████▀  █████▄▄██   ███    █▀    ███    ███ ████████▀    ███    █▀     ▀█████▀ 
-                        ▀                        ███    ███                                    
-
+                                                 ███    ███                                    
+'
 clear
 echo -e "\n$ansi_art\n"
 
 sudo pacman -Syu --noconfirm --needed git
 
 # Use custom repo if specified, otherwise default to basecamp/polarchy
-POLARCHY_REPO="${POLARCHY_REPO:-basecamp/polarchy}"
+POLARCHY_REPO="${POLARCHY_REPO:-Grandfath3r/polarchy}"
 
 echo -e "\nCloning Polarchy from: https://github.com/${POLARCHY_REPO}.git"
 rm -rf ~/.local/share/polarchy/
