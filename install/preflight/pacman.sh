@@ -1,23 +1,9 @@
-if [[ -n ${POLARCHY_ONLINE_INSTALL:-} ]]; then
-  # Install build tools
-  sudo pacman -S --needed --noconfirm base-devel
-
-  # Configure pacman
-  if [[ ${POLARCHY_MIRROR:-} == "edge" ]] ; then
-    sudo cp -f ~/.local/share/polarchy/default/pacman/pacman-edge.conf /etc/pacman.conf
-    sudo cp -f ~/.local/share/polarchy/default/pacman/mirrorlist-edge /etc/pacman.d/mirrorlist
-  else
-    sudo cp -f ~/.local/share/polarchy/default/pacman/pacman-stable.conf /etc/pacman.conf
-    sudo cp -f ~/.local/share/polarchy/default/pacman/mirrorlist-stable /etc/pacman.d/mirrorlist
-  fi
-
-  sudo pacman-key --recv-keys 40DFB630FF42BCFFB047046CF0134EE680CAC571 --keyserver keys.openpgp.org
-  sudo pacman-key --lsign-key 40DFB630FF42BCFFB047046CF0134EE680CAC571
-
-  sudo pacman -Sy
-  sudo pacman -S --noconfirm --needed polarchy-keyring
-
-
-  # Refresh all repos
-  sudo pacman -Syyu --noconfirm
+#!/bin/bash
+# Verify pacman works
+if ! sudo pacman -Syy >/dev/null 2>&1; then
+  echo "ERROR: pacman sync failed. Check /etc/pacman.d/mirrorlist"
+  exit 1
 fi
+
+# Keys refresh
+sudo pacman-key --populate archlinux 2>/dev/null || true
