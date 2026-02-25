@@ -1,6 +1,3 @@
-# Make all bin scripts executable
-chmod +x POLARCHY_PATH/bin/*
-
 run_logged $POLARCHY_INSTALL/packaging/yay.sh
 run_logged $POLARCHY_INSTALL/packaging/base.sh
 run_logged $POLARCHY_INSTALL/packaging/fonts.sh
