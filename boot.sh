@@ -33,12 +33,5 @@ cd ~/.local/share/polarchy
 git fetch origin "${POLARCHY_REF}" && git checkout "${POLARCHY_REF}"
 cd -
 
-# Set edge mirror for dev installs
-if [[ $POLARCHY_REF == "dev" ]]; then
-  export POLARCHY_MIRROR=edge
-else
-  export POLARCHY_MIRROR=stable
-fi
-
 echo -e "\nInstallation starting..."
 source ~/.local/share/polarchy/install.sh
