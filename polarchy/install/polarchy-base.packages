@@ -35,6 +35,7 @@ gimp
 github-cli
 gnome-calculator
 gnome-disk-utility
+gnome-keyring
 gnome-themes-extra
 gpu-screen-recorder
 grim

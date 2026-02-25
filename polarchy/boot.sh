@@ -26,8 +26,8 @@ echo -e "\nCloning Polarchy from: https://github.com/${POLARCHY_REPO}.git"
 rm -rf ~/.local/share/polarchy/
 git clone "https://github.com/${POLARCHY_REPO}.git" ~/.local/share/polarchy >/dev/null
 
-# Use custom branch if instructed, otherwise default to master
-POLARCHY_REF="${POLARCHY_REF:-master}"
+# Use custom branch if instructed, otherwise default to main
+POLARCHY_REF="${POLARCHY_REF:-main}"
 echo -e "\e[32mUsing branch: $POLARCHY_REF\e[0m"
 cd ~/.local/share/polarchy
 git fetch origin "${POLARCHY_REF}" && git checkout "${POLARCHY_REF}"
