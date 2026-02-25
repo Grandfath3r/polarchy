@@ -10,7 +10,7 @@ export POLARCHY_INSTALL_LOG_FILE="/var/log/polarchy-install.log"
 export PATH="$POLARCHY_PATH/bin:$PATH"
 
 # Make all bin scripts executable
-chmod +x bin/*
+chmod +x ./bin/*
 
 # Install
 source "$POLARCHY_INSTALL/helpers/all.sh"
