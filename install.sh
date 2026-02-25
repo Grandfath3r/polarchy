@@ -9,6 +9,9 @@ export POLARCHY_INSTALL="$POLARCHY_PATH/install"
 export POLARCHY_INSTALL_LOG_FILE="/var/log/polarchy-install.log"
 export PATH="$POLARCHY_PATH/bin:$PATH"
 
+# Make all bin scripts executable
+chmod +x bin/*
+
 # Install
 source "$POLARCHY_INSTALL/helpers/all.sh"
 source "$POLARCHY_INSTALL/preflight/all.sh"
