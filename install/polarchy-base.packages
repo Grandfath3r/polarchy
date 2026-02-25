@@ -60,6 +60,7 @@ jq
 kdenlive
 kvantum-qt5
 lazygit
+lazyvim
 less
 libqalculate
 libreoffice-fresh
@@ -86,8 +87,6 @@ pinta
 playerctl
 plocate
 plymouth
-polarchy-nvim
-polarchy-walker
 polkit-gnome
 postgresql-libs
 power-profiles-daemon
@@ -118,6 +117,7 @@ ufw
 unzip
 usage
 uwsm
+walker
 waybar
 wayfreeze
 whois

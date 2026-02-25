@@ -1,3 +1,4 @@
+run_logged $POLARCHY_INSTALL/packaging/yay.sh
 run_logged $POLARCHY_INSTALL/packaging/base.sh
 run_logged $POLARCHY_INSTALL/packaging/fonts.sh
 run_logged $POLARCHY_INSTALL/packaging/nvim.sh
