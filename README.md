@@ -37,3 +37,8 @@ archinstall
 | Applications > Audio           |                               |
 | Network configuration          |                               |
 | Timezone                       |                               |
+
+
+
+# As your normal user with sudo
+curl -fsSL https://raw.githubusercontent.com/Grandfath3r/polarchy/main/boot.sh | bash
