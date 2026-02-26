@@ -3,12 +3,6 @@ set -e
 
 echo "Setting up Secure Boot for Limine..."
 
-# Check if running as root
-if [ "$EUID" -ne 0 ]; then
-  echo "Run as root: sudo $0"
-  exit 1
-fi
-
 # Install sbctl
 if ! command -v sbctl &>/dev/null; then
   pacman -S --noconfirm sbctl
