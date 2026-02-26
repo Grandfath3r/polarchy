@@ -33,7 +33,18 @@ fi
 
 # Sign *all* potential Limine EFIs + kernels
 echo "Signing boot files..." | tee -a "$POLARCHY_INSTALL_LOG_FILE"
-sbctl verify -s  # Signs everything unsigned (safer than manual)
+sbctl verify
+
+# Sign common Limine EFI locations (adjust based on verify output)
+for efi in /boot/EFI/BOOT/BOOTX64.EFI /boot/EFI/Limine/limine_x64.efi; do
+  if [[ -f "$efi" ]]; then
+    sbctl sign --save "$efi"
+    echo "Signed: $efi" | tee -a "$POLARCHY_INSTALL_LOG_FILE"
+  fi
+done
+
+# Sign everything else saved previously
+sbctl sign-all
 
 # Enroll limine.cfg (Limine-specific)
 if [ -f /boot/limine.cfg ]; then
