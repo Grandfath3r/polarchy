@@ -1,49 +1,42 @@
-#!/bin/bash
-set -e
+# Grab log file from env (set by run_logged)
+: "${POLARCHY_INSTALL_LOG_FILE:=/var/log/polarchy-install.log}"
 
-echo "Setting up Secure Boot for Limine..."
+if [ "$EUID" -ne 0 ]; then
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] Self-elevating secure-boot.sh to root..." >> "$POLARCHY_INSTALL_LOG_FILE"
+  exec sudo bash "$0" "$@"
+fi
 
-# Install sbctl
+set -euo pipefail  # +u (unset vars fail), +o pipefail
+
+echo "Setting up Secure Boot for Limine..." | tee -a "$POLARCHY_INSTALL_LOG_FILE"
+
+# Install sbctl if missing
 if ! command -v sbctl &>/dev/null; then
-  pacman -S --noconfirm sbctl
+  pacman -Syu --noconfirm sbctl  # -yu for safety
 fi
 
-# Create and enroll keys (requires Setup Mode)
+# Create/enroll keys
 if ! sbctl status | grep -q "Installed: ✓"; then
-  echo "Creating Secure Boot keys..."
   sbctl create-keys
-  
-  echo "Enrolling keys (Microsoft + custom)..."
-  sbctl enroll-keys -m
-  
-  echo "Keys enrolled. Reboot to Setup Mode if needed."
+  sbctl enroll-keys -m   # Microsoft keys for Windows dual-boot
+  echo "Keys enrolled ✓ Reboot + Setup Mode to activate."
 else
-  echo "Keys already enrolled."
+  echo "Keys already enrolled ✓"
 fi
 
-# Sign Limine EFI binaries (adjust paths if needed)
-echo "Signing Limine binaries..."
-for file in /boot/EFI/limine/BOOTX64.EFI /boot/EFI/BOOT/BOOTX64.EFI; do
-  if [ -f "$file" ]; then
-    sbctl sign -s "$file" || echo "Warning: Failed to sign $file"
-  fi
-done
+# Sign *all* potential Limine EFIs + kernels
+echo "Signing boot files..." | tee -a "$POLARCHY_INSTALL_LOG_FILE"
+sbctl verify -s  # Signs everything unsigned (safer than manual)
 
-# Enroll Limine config hash
+# Enroll limine.cfg (Limine-specific)
 if [ -f /boot/limine.cfg ]; then
-  echo "Enrolling limine.cfg hash..."
   limine-enroll-config /boot/limine.cfg
 else
-  echo "Warning: /boot/limine.cfg not found"
+  echo "Warning: /boot/limine.cfg missing (Limine config unsigned)"
 fi
 
-# Install auto-sign hooks for future updates
+# Auto-sign hooks (critical for pacman updates)
 sbctl install-hooks
 
-echo "Secure Boot setup complete!"
-echo "1. Reboot and verify Secure Boot in BIOS"
-echo "2. Test boot - Limine should now work with Secure Boot enabled"
-echo "3. Run 'sbctl status' and 'sbctl verify' to confirm"
-
-# Show status
-sbctl status
+echo "Secure Boot enabled for Limine!"
+echo "Next: reboot → BIOS → Secure Boot ON → verify 'sbctl status'" | tee -a "$POLARCHY_INSTALL_LOG_FILE"
