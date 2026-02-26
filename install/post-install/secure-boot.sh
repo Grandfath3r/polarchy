@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Grab log file from env (set by run_logged)
 : "${POLARCHY_INSTALL_LOG_FILE:=/var/log/polarchy-install.log}"
 
