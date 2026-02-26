@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Source-safe: handle being sourced by run_logged
+if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
+  exec bash "${BASH_SOURCE[0]}" "$@"
+fi
+
 # Grab log file from env (set by run_logged)
 : "${POLARCHY_INSTALL_LOG_FILE:=/var/log/polarchy-install.log}"
 
