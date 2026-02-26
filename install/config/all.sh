@@ -18,7 +18,6 @@ run_logged $POLARCHY_INSTALL/config/walker-elephant.sh
 run_logged $POLARCHY_INSTALL/config/fast-shutdown.sh
 run_logged $POLARCHY_INSTALL/config/sudoless-asdcontrol.sh
 run_logged $POLARCHY_INSTALL/config/input-group.sh
-run_logged $POLARCHY_INSTALL/config/polarchy-ai-skill.sh
 run_logged $POLARCHY_INSTALL/config/powerprofilesctl-rules.sh
 run_logged $POLARCHY_INSTALL/config/wifi-powersave-rules.sh
 run_logged $POLARCHY_INSTALL/config/hibernation.sh
