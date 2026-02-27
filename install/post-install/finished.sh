@@ -1,12 +1,14 @@
 stop_install_log
 
+yay -S --noconfirm python-terminaltexteffects
+
 echo_in_style() {
   echo "$1" | tte --canvas-width 0 --anchor-text c --frame-rate 640 print
 }
 
 clear
 echo
-tte -i ~/.local/share/polarchy/logo.txt --canvas-width 0 --anchor-text c --animation-rate 0 print
+tte -i ~/.local/share/polarchy/logo.txt --canvas-width 0 --anchor-text c --frame-rate 920 laseretch
 echo
 
 # Display installation time if available
