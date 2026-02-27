@@ -26,9 +26,9 @@ fi
 if ! sbctl status | grep -q "Installed: ✓"; then
   sbctl create-keys
   sbctl enroll-keys -m   # Microsoft keys for Windows dual-boot
-  echo "Keys enrolled ✓ Reboot + Setup Mode to activate."
+  echo "Keys enrolled Reboot + Setup Mode to activate."
 else
-  echo "Keys already enrolled ✓"
+  echo "Keys already enrolled"
 fi
 
 # Sign *all* potential Limine EFIs + kernels
