@@ -1,4 +1,4 @@
-if command -v limine &>/dev/null; then
+if command -v limine &>/dev/null && [[ ! -f /etc/default/limine ]]; then
   sudo pacman -S --noconfirm --needed limine-snapper-sync limine-mkinitcpio-hook
 
   sudo tee /etc/mkinitcpio.conf.d/polarchy_hooks.conf <<EOF >/dev/null
@@ -24,7 +24,7 @@ EOF
     limine_config="/boot/limine.conf"
   else
     echo "Error: Limine config not found" >&2
-    exit 1
+    return 0
   fi
 
   CMDLINE=$(grep "^[[:space:]]*cmdline:" "$limine_config" | head -1 | sed 's/^[[:space:]]*cmdline:[[:space:]]*//')
@@ -68,22 +68,23 @@ EOF
   sudo sed -i 's/^FREE_LIMIT="0.2"/FREE_LIMIT="0.3"/' /etc/snapper/configs/{root,home}
 
   chrootable_systemctl_enable limine-snapper-sync.service
+
+  echo "Re-enabling mkinitcpio hooks..."
+
+  # Restore the specific mkinitcpio pacman hooks
+  if [ -f /usr/share/libalpm/hooks/90-mkinitcpio-install.hook.disabled ]; then
+    sudo mv /usr/share/libalpm/hooks/90-mkinitcpio-install.hook.disabled /usr/share/libalpm/hooks/90-mkinitcpio-install.hook
+  fi
+
+  if [ -f /usr/share/libalpm/hooks/60-mkinitcpio-remove.hook.disabled ]; then
+    sudo mv /usr/share/libalpm/hooks/60-mkinitcpio-remove.hook.disabled /usr/share/libalpm/hooks/60-mkinitcpio-remove.hook
+  fi
+
+  echo "mkinitcpio hooks re-enabled"
+
+  sudo limine-update
+
 fi
-
-echo "Re-enabling mkinitcpio hooks..."
-
-# Restore the specific mkinitcpio pacman hooks
-if [ -f /usr/share/libalpm/hooks/90-mkinitcpio-install.hook.disabled ]; then
-  sudo mv /usr/share/libalpm/hooks/90-mkinitcpio-install.hook.disabled /usr/share/libalpm/hooks/90-mkinitcpio-install.hook
-fi
-
-if [ -f /usr/share/libalpm/hooks/60-mkinitcpio-remove.hook.disabled ]; then
-  sudo mv /usr/share/libalpm/hooks/60-mkinitcpio-remove.hook.disabled /usr/share/libalpm/hooks/60-mkinitcpio-remove.hook
-fi
-
-echo "mkinitcpio hooks re-enabled"
-
-sudo limine-update
 
 if [[ -n $EFI ]] && efibootmgr &>/dev/null; then
     # Remove the archinstall-created Limine entry
