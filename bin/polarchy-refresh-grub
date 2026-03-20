@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# Just in case PATH did not include Polarchy bin yet
+POLARCHY_PATH=${POLARCHY_PATH:-$HOME/.local/share/polarchy}
+export PATH="$POLARCHY_PATH/bin:$PATH"
+
+if ! command -v grub-mkconfig &>/dev/null; then
+  echo "GRUB tools not found; cannot refresh GRUB config" >&2
+  exit 1
+fi
+
+echo "Regenerating GRUB configuration..."
+
+if [[ -d /boot/grub ]]; then
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+else
+  echo "Error: /boot/grub not found; is GRUB installed to /boot?" >&2
+  exit 1
+fi
+
+# If grub-btrfs is installed, make sure its daemon is enabled/running
+if systemctl list-unit-files | grep -q '^grub-btrfsd.service'; then
+  sudo systemctl enable --now grub-btrfsd.service || true
+fi
+
+echo "GRUB refresh complete"

@@ -1,8 +1,7 @@
 # Polarchy core package list installed via install/packaging/base.sh
-# This file is also used by the ISO builder when determining needs
+
 
 alsa-utils
-asdcontrol
 avahi
 bash-completion
 bat
@@ -46,7 +45,7 @@ gvfs-smb
 hypridle
 hyprland
 hyprland-guiutils
-hyprland-preview-share-picker
+hyprland-preview-share-picker-git
 hyprlock
 hyprpicker
 hyprsunset
@@ -79,7 +78,7 @@ noto-fonts-cjk
 noto-fonts-emoji
 noto-fonts-extra
 nss-mdns
-nvim
+neovim
 opencode
 pamixer
 pinta
@@ -105,7 +104,7 @@ swayosd
 system-config-printer
 tldr
 tmux
-tobi-try
+try-cli
 tree-sitter-cli
 ttf-cascadia-mono-nerd
 ttf-ia-writer
@@ -118,7 +117,7 @@ usage
 uwsm
 walker
 waybar
-wayfreeze
+wayfreeze-git
 whois
 wireless-regdb
 wiremix

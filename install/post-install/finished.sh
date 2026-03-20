@@ -30,11 +30,5 @@ fi
 if gum confirm --padding "0 0 0 $((PADDING_LEFT + 32))" --show-help=false --default --affirmative "Reboot Now" --negative "" ""; then
   # Clear screen to hide any shutdown messages
   clear
-
-  if [[ -n "${POLARCHY_CHROOT_INSTALL:-}" ]]; then
-    touch /var/tmp/polarchy-install-completed
-    exit 0
-  else
-    sudo reboot 2>/dev/null
-  fi
+  sudo reboot 2>/dev/null
 fi

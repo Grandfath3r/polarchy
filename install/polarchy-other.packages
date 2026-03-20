@@ -1,5 +1,4 @@
 # Packages installed outside of install/packages.sh or optional packages
-# Utilized by ISO builder to ensure package availability in the ISO
 
 autoconf-archive
 asusctl
@@ -21,9 +20,8 @@ libpulse
 libsass
 libva-intel-driver
 libva-nvidia-driver
-limine
-limine-mkinitcpio-hook
-limine-snapper-sync
+grub
+grub-btrfs
 linux
 linux-firmware
 linux-headers

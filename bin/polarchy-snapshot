@@ -29,7 +29,8 @@ create)
   echo
   ;;
 restore)
-  sudo limine-snapper-restore
+  echo "On GRUB-based Polarchy, restore Btrfs snapshots from the GRUB menu (via grub-btrfs)."
+  echo "This subcommand is a no-op under GRUB."
   ;;
 delete)
   sudo snapper -c "$config" delete 0

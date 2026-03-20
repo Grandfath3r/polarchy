@@ -1,59 +1,31 @@
 #!/bin/bash
 
-# Removes hibernation setup: disables swap, removes swapfile, removes fstab entry,
-# removes resume hook, and removes suspend-then-hibernate configuration.
+set -euo pipefail
 
-MKINITCPIO_CONF="/etc/mkinitcpio.conf.d/polarchy_resume.conf"
+echo "Disabling hibernation for GRUB..."
 
-# Check if hibernation is configured
-if [ ! -f "$MKINITCPIO_CONF" ] || ! grep -q "^HOOKS+=(resume)$" "$MKINITCPIO_CONF"; then
-  echo "Hibernation is not set up"
-  exit 0
+# 1) Remove resume hook from mkinitcpio
+if [[ -f /etc/mkinitcpio.conf ]]; then
+  if grep -q 'resume' /etc/mkinitcpio.conf; then
+    sudo sed -i 's/ resume//g; s/resume //g' /etc/mkinitcpio.conf
+  fi
 fi
 
-if ! gum confirm "Remove hibernation setup?"; then
-  exit 0
+# 2) Strip resume= from GRUB cmdline
+if [[ -f /etc/default/grub ]]; then
+  sudo sed -i 's/resume=[^[:space:]]*//g' /etc/default/grub
 fi
 
-SWAP_SUBVOLUME="/swap"
-SWAP_FILE="$SWAP_SUBVOLUME/swapfile"
+# 3) Rebuild initramfs
+echo "Rebuilding initramfs (mkinitcpio -P)..."
+sudo mkinitcpio -P
 
-# Disable swap if active
-if swapon --show | grep -q "$SWAP_FILE"; then
-  echo "Disabling swap on $SWAP_FILE"
-  sudo swapoff "$SWAP_FILE"
+# 4) Regenerate GRUB config
+if [[ -d /boot/grub ]]; then
+  echo "Regenerating /boot/grub/grub.cfg..."
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+else
+  echo "Warning: /boot/grub not found; skipping grub-mkconfig"
 fi
 
-# Remove swapfile
-if [ -f "$SWAP_FILE" ]; then
-  echo "Removing swapfile"
-  sudo rm "$SWAP_FILE"
-fi
-
-# Remove swap subvolume
-if sudo btrfs subvolume show "$SWAP_SUBVOLUME" &>/dev/null; then
-  echo "Removing Btrfs subvolume $SWAP_SUBVOLUME"
-  sudo btrfs subvolume delete "$SWAP_SUBVOLUME"
-fi
-
-# Remove fstab entry
-if grep -Fq "$SWAP_FILE" /etc/fstab; then
-  echo "Removing swapfile from /etc/fstab"
-  sudo cp -a /etc/fstab "/etc/fstab.$(date +%Y%m%d%H%M%S).back"
-  sudo sed -i "\|$SWAP_FILE|d" /etc/fstab
-  sudo sed -i '/^# Btrfs swapfile for system hibernation$/d' /etc/fstab
-fi
-
-# Remove suspend-then-hibernate configuration
-echo "Removing suspend-then-hibernate configuration"
-sudo rm -f /etc/systemd/logind.conf.d/lid.conf
-sudo rm -f /etc/systemd/sleep.conf.d/hibernate.conf
-
-# Remove mkinitcpio resume hook
-echo "Removing resume hook"
-sudo rm "$MKINITCPIO_CONF"
-
-echo "Regenerating initramfs..."
-sudo limine-mkinitcpio
-
-echo "Hibernation removed"
+echo "Hibernation disabled (resume hooks/cmdline removed)."

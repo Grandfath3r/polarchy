@@ -15,6 +15,6 @@ echo '[[ -f ~/.bashrc ]] && . ~/.bashrc' | tee ~/.bash_profile >/dev/null
 
 $(bash $POLARCHY_PATH/install/config/theme.sh)
 
-polarchy-refresh-limine
+polarchy-refresh-grub
 polarchy-refresh-plymouth
 polarchy-nvim-setup
