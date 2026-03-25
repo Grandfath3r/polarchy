@@ -48,7 +48,7 @@ fi
 
 # Enable grub-btrfs daemon if present (for snapshot entries in GRUB menu)
 if systemctl list-unit-files | grep -q '^grub-btrfsd.service'; then
-  chrootable_systemctl_enable grub-btrfsd.service
+  sudo systemctl enable grub-btrfsd.service
 fi
 
 echo "Regenerating GRUB configuration..."
