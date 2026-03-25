@@ -5,21 +5,40 @@ set -euo pipefail
 # Find swap device (simple heuristics: /swap or first /dev entry in /proc/swaps)
 swap_dev=""
 
+# Prefer a swapfile at /swap if you created one
 if findmnt -n -o SOURCE /swap &>/dev/null; then
-  swap_dev=$(findmnt -n -o SOURCE /swap)
-else
-  swap_dev=$(grep -m1 '^/dev' /proc/swaps | awk '{print $1}' || true)
+  cand=$(findmnt -n -o SOURCE /swap)
+  # Only accept non-zram
+  if [[ "$cand" != /dev/zram* ]]; then
+    swap_dev="$cand"
+  fi
 fi
 
+# Fallback: scan /proc/swaps, skip zram and tmpfs/overlay
 if [[ -z "${swap_dev:-}" ]]; then
-  echo "No swap device found; cannot configure hibernation for GRUB" >&2
-  exit 1
+  while read -r dev _; do
+    case "$dev" in
+      /dev/zram*|zram*|tmpfs|overlay)
+        continue
+        ;;
+      /dev/*)
+        swap_dev="$dev"
+        break
+        ;;
+    esac
+  done < <(tail -n +2 /proc/swaps)   # skip header line
+fi
+
+# If still nothing, just skip hibernation instead of failing the whole install
+if [[ -z "${swap_dev:-}" ]]; then
+  echo "No disk-backed swap device found (only zram?). Skipping hibernation setup."
+  exit 0
 fi
 
 resume_uuid=$(blkid -s UUID -o value "$swap_dev" 2>/dev/null || true)
 if [[ -z "${resume_uuid:-}" ]]; then
-  echo "Could not read UUID for $swap_dev" >&2
-  exit 1
+  echo "Could not read UUID for $swap_dev; skipping hibernation setup."
+  exit 0
 fi
 
 echo "Configuring hibernation for GRUB using swap: $swap_dev (UUID=$resume_uuid)"
